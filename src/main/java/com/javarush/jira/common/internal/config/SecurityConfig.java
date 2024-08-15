@@ -3,8 +3,6 @@ package com.javarush.jira.common.internal.config;
 import com.javarush.jira.login.AuthUser;
 import com.javarush.jira.login.Role;
 import com.javarush.jira.login.internal.UserRepository;
-import com.javarush.jira.login.internal.sociallogin.CustomOAuth2UserService;
-import com.javarush.jira.login.internal.sociallogin.CustomTokenResponseConverter;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -37,7 +35,6 @@ public class SecurityConfig {
     public static final PasswordEncoder PASSWORD_ENCODER = PasswordEncoderFactories.createDelegatingPasswordEncoder();
 
     private final UserRepository userRepository;
-    private final CustomOAuth2UserService customOAuth2UserService;
     private final RestAuthenticationEntryPoint restAuthenticationEntryPoint;
 
     @Bean
@@ -87,7 +84,6 @@ public class SecurityConfig {
                 .accessTokenResponseClient(accessTokenResponseClient())
                 .and()
                 .userInfoEndpoint()
-                .userService(customOAuth2UserService)
                 .and().and().logout()
                 .logoutUrl("/ui/logout")
                 .logoutSuccessUrl("/")
@@ -104,7 +100,6 @@ public class SecurityConfig {
                 new DefaultAuthorizationCodeTokenResponseClient();
         OAuth2AccessTokenResponseHttpMessageConverter tokenResponseHttpMessageConverter =
                 new OAuth2AccessTokenResponseHttpMessageConverter();
-        tokenResponseHttpMessageConverter.setAccessTokenResponseConverter(new CustomTokenResponseConverter());
         RestTemplate restTemplate = new RestTemplate(Arrays.asList(
                 new FormHttpMessageConverter(), tokenResponseHttpMessageConverter));
         restTemplate.setErrorHandler(new OAuth2ErrorResponseErrorHandler());
