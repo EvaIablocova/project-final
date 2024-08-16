@@ -13,6 +13,7 @@
     <artifactId>jira</artifactId>
     <version>1.0</version>
     <name>JiraRush</name>
+    <packaging>war</packaging>
     <description>Mini-JIRA from JavaRush</description>
 
     <properties>
